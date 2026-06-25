@@ -1,0 +1,118 @@
+version: '3.9'
+
+services:
+  # ─── PostgreSQL Database ───────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: alfaleus_postgres
+    environment:
+      POSTGRES_USER: alfaleus
+      POSTGRES_PASSWORD: alfaleus_dev
+      POSTGRES_DB: alfaleus_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U alfaleus -d alfaleus_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Redis (Celery Broker + SSE Pub/Sub) ───────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: alfaleus_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Ollama (TinyLlama LLM) ────────────────────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: alfaleus_ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+    # Pull tinyllama on first start
+    entrypoint: ["/bin/bash", "-c", "ollama serve & sleep 5 && ollama pull tinyllama && wait"]
+
+  # ─── FastAPI Backend ───────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: alfaleus_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://alfaleus:alfaleus_dev@postgres:5432/alfaleus_db
+      - REDIS_URL=redis://redis:6379/0
+      - OLLAMA_URL=http://ollama:11434
+      - SECRET_KEY=dev_secret_key_change_in_production
+      - CORS_ORIGINS=http://localhost:5173,http://localhost:3000
+      - NOTION_API_KEY=${NOTION_API_KEY:-}
+      - NOTION_DATABASE_ID=${NOTION_DATABASE_ID:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    restart: unless-stopped
+
+  # ─── Celery Worker ─────────────────────────────────────────────────
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: alfaleus_worker
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://alfaleus:alfaleus_dev@postgres:5432/alfaleus_db
+      - REDIS_URL=redis://redis:6379/0
+      - OLLAMA_URL=http://ollama:11434
+      - SECRET_KEY=dev_secret_key_change_in_production
+      - NOTION_API_KEY=${NOTION_API_KEY:-}
+      - NOTION_DATABASE_ID=${NOTION_DATABASE_ID:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+    command: celery -A celery_app worker --loglevel=info --concurrency=4
+    restart: unless-stopped
+
+  # ─── React Frontend ────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: alfaleus_frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8000/api/v1
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run dev -- --host 0.0.0.0
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  redis_data:
+  ollama_data:

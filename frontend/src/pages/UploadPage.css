@@ -1,0 +1,44 @@
+.upload-page { max-width: 900px; }
+.drop-zone { border: 2px dashed var(--border); border-radius: 16px; padding: 60px 40px; text-align: center; cursor: pointer; transition: all 0.2s ease; margin-bottom: 20px; }
+.drop-zone:hover, .drop-zone--active { border-color: var(--accent-primary); background: rgba(108, 99, 255, 0.05); box-shadow: var(--shadow-glow); }
+.drop-zone--filled { border-color: var(--accent-secondary); background: rgba(0, 212, 170, 0.04); }
+.drop-icon { font-size: 3rem; margin-bottom: 16px; }
+.drop-text { color: var(--text-secondary); font-size: 1rem; }
+.drop-text strong { color: var(--text-primary); }
+.drop-hint { font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; }
+.drop-file-info { text-align: center; }
+.drop-filename { font-size: 1.1rem; font-weight: 600; color: var(--accent-secondary); }
+.drop-filesize { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+
+.validation-panel { padding: 16px 20px; border-radius: 12px; margin-bottom: 20px; }
+.validation--success { border: 1px solid rgba(0, 212, 170, 0.3); background: rgba(0, 212, 170, 0.05); }
+.validation--error { border: 1px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.05); }
+.validation-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.validation-icon { font-size: 1.2rem; }
+.validation-count { color: var(--text-muted); font-size: 0.85rem; margin-left: auto; }
+.validation-error { color: var(--accent-danger); font-size: 0.85rem; padding: 4px 0; }
+
+.preview-section { margin-bottom: 24px; }
+.section-title { font-size: 0.9rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+.preview-table td, .preview-table th { max-width: 160px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.upload-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
+
+.upload-success { text-align: center; padding: 60px 40px; border-radius: 20px; }
+.success-icon { font-size: 4rem; margin-bottom: 16px; }
+.upload-success h2 { font-size: 1.6rem; color: var(--text-primary); margin-bottom: 12px; }
+.upload-success p { color: var(--text-secondary); font-size: 1rem; margin-bottom: 28px; }
+.highlight { color: var(--accent-secondary); font-size: 1.4rem; }
+.success-actions { display: flex; justify-content: center; gap: 12px; }
+
+.domain-enrichment { margin-top: 32px; padding: 24px; border-radius: 14px; }
+.domain-enrichment h3 { font-size: 1rem; margin-bottom: 6px; color: var(--text-primary); }
+.domain-form { margin-top: 16px; }
+.domain-input-row { display: flex; gap: 12px; }
+.domain-input-row .input { flex: 1; }
+.domain-result { margin-top: 12px; color: var(--accent-secondary); font-size: 0.9rem; }
+.link-btn { background: none; border: none; color: var(--accent-primary); cursor: pointer; text-decoration: underline; margin-left: 8px; font-size: 0.9rem; }
+.error-banner { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: var(--accent-danger); padding: 12px 16px; border-radius: 10px; margin-bottom: 16px; }
+.error-text { color: var(--accent-danger); font-size: 0.85rem; margin-top: 8px; }
+.spinner-sm { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; margin-right: 6px; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }

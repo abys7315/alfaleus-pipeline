@@ -1,0 +1,72 @@
+# ─── Python ───────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+*.so
+.venv/
+venv/
+env/
+
+# ─── Environment variables ────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ─── Node / Frontend ──────────────────────────────
+node_modules/
+dist/
+.vite/
+*.local
+
+# ─── IDE ──────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# ─── Database ─────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+
+# ─── Docker ───────────────────────────────────────
+.dockerignore
+
+# ─── Secrets (NEVER commit these) ─────────────────
+*.pem
+*.key
+*.cert
+secrets.json
+
+# ─── Playwright ───────────────────────────────────
+playwright-report/
+test-results/
+
+# ─── Model weights (too large for git) ────────────
+*.gguf
+*.bin
+*.safetensors
+
+# ─── Logs ─────────────────────────────────────────
+*.log
+logs/
+celery*.log
+
+# ─── OS ───────────────────────────────────────────
+Thumbs.db
+.DS_Store
