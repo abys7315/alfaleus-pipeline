@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     NOTION_API_KEY: str = ""
     NOTION_DATABASE_ID: str = ""
 
+    GOOGLE_API_KEY: str = ""
+    GOOGLE_CSE_ID: str = ""
+
     SECRET_KEY: str = "change-me-in-production-use-a-long-random-string"
     CORS_ORIGINS: str = "*"
 
